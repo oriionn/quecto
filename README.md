@@ -32,7 +32,7 @@ module.exports = {
   DOMAIN: "http://localhost",
 
   // Database type: json, mongodb
-  DB_TYPE: "mongodb",
+  DB_TYPE: "json",
 
   // mongodb config (if DB_TYPE is mongodb)
   DB_HOST: "127.0.0.1",
