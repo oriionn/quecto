@@ -107,7 +107,7 @@ app.get("/s/:code", async (req, res) => {
     }
 });
 
-app.get("/api/:code", async (req, res) => {
+app.get("/api/s/:code", async (req, res) => {
     let code = req.params.code;
 
     if (isJSON) {
