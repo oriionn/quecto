@@ -77,7 +77,7 @@ POST /api/shorten
 
 ### Get a short link
 ```http
-GET /api/:code
+GET /api/s/:code
 ```
 
 #### Response
