@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Quecto</title>
+
+    <link rel="stylesheet" href="/public/style.css">
+</head>
+<body>
+    <form>
+        <div class="content">
+            <input type="text" name="link" placeholder="Link" disabled>
+            <input type="submit" value="Copy">
+        </div>
+    </form>
+
+    <script>
+        const form = document.querySelector("form");
+
+        form.onsubmit = (e) => {
+          e.preventDefault();
+          navigator.clipboard.writeText(form.link.value);
+          alert("Copied to clipboard!");
+        }
+
+        const params = new URLSearchParams(window.location.search);
+        const link = params.get("link");
+
+        form.link.value = link;
+    </script>
+</body>
+</html>
