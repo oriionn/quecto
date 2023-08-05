@@ -27,8 +27,6 @@ form input[type="text"] {
     font-size: 30px;
     margin: 0 !important;
     background-color: white !important;
-
-    cursor: not-allowed;
 }
 
 form input[type="submit"] {
@@ -47,4 +45,10 @@ form input[type="submit"] {
 
 .content {
     box-shadow: black 0px 0px 10px 0px;
+}
+
+.qrcode {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
 }

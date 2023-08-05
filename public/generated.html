@@ -9,10 +9,12 @@
 <body>
     <form>
         <div class="content">
-            <input type="text" name="link" placeholder="Link" disabled>
+            <input type="text" name="link" placeholder="Link" style="cursor: not-allowed;" disabled>
             <input type="submit" value="Copy">
         </div>
     </form>
+
+    <img src="" class="qrcode" id="qrcode">
 
     <script>
         const form = document.querySelector("form");
@@ -27,6 +29,7 @@
         const link = params.get("link");
 
         form.link.value = link;
+        document.getElementById("qrcode").src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${link}`;
     </script>
 </body>
 </html>

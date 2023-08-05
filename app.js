@@ -11,6 +11,7 @@ const dbName = config.DB_NAME
 const isJSON = config.DB_TYPE.toLowerCase() === "json";
 const isMongoDB = config.DB_TYPE.toLowerCase() === "mongodb";
 const multer = require('multer');
+const QRCode = require('qrcode')
 
 app.use(express.urlencoded({ extended: true }));
 app.use("/public", express.static(__dirname + "/public"));
@@ -152,7 +153,7 @@ app.get("/api/quectoCheck", (req, res) => {
     res.json({status: 200, data: {quecto: true}});
 });
 
-app.listen(config.PORT, async () => {
+app.listen(process.env.PORT || config.PORT, async () => {
     if (isJSON) {
         if (!config.DB_JSON_PATH) {
             console.log("Error: DB_JSON_PATH not found");
