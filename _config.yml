@@ -1,1 +1,5 @@
-
+title: Quecto
+description: Quecto is a universal, open-source solution that lets you create your own link shortening system.
+remote_theme: pages-themes/architect@v0.2.0
+plugins:
+- jekyll-remote-theme
