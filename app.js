@@ -11,7 +11,6 @@ const dbName = config.DB_NAME
 const isJSON = config.DB_TYPE.toLowerCase() === "json";
 const isMongoDB = config.DB_TYPE.toLowerCase() === "mongodb";
 const multer = require('multer');
-const QRCode = require('qrcode')
 
 app.use(express.urlencoded({ extended: true }));
 app.use("/public", express.static(__dirname + "/public"));
