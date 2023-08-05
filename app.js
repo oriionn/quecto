@@ -19,12 +19,8 @@ app.get('/', (req, res) => {
     res.sendFile(__dirname + '/public/index.html');
 });
 
-app.get("/generated", (req, res) => {
-    res.sendFile(__dirname + '/public/generated.html');
-})
-
 function generateCode() {
-    const buffer = crypto.randomBytes(3);
+    const buffer = crypto.randomBytes(1);
     const hex = buffer.toString('hex');
 
     return Date.now().toString(16) + hex;
@@ -46,7 +42,7 @@ async function shorten(url) {
 
         db[code] = url;
         fs.writeFileSync(config.DB_JSON_PATH, JSON.stringify(db));
-        data = { status: 200, data: { original: url, shorten: `${config.DOMAIN}/${code}` } };
+        data = { status: 200, data: { original: url, shorten: `${config.DOMAIN}/s/${code}` } };
     } else if (isMongoDB) {
         let code = generateCode();
 
@@ -59,7 +55,7 @@ async function shorten(url) {
         let collection = db.collection('links');
 
         await collection.insertOne({link: url, code: code});
-        data = {status: 200, data: {original: url, shorten: `${config.DOMAIN}/${code}`}};
+        data = {status: 200, data: {original: url, shorten: `${config.DOMAIN}/s/${code}`}};
     }
 
     return data;
@@ -74,7 +70,7 @@ app.post('/api/shorten', multer().none(), async (req, res) => {
     res.json(await shorten(req.body.link));
 });
 
-app.get("/:code", async (req, res) => {
+app.get("/s/:code", async (req, res) => {
     let code = req.params.code;
 
     if (isJSON) {
@@ -128,7 +124,7 @@ app.get("/api/:code", async (req, res) => {
             return res.status(404).send("Error: Code not found");
         }
 
-        res.json({status: 200, data: {original: db[code], shorten: `${config.DOMAIN}/${code}`}});
+        res.json({status: 200, data: {original: db[code], shorten: `${config.DOMAIN}/s/${code}`}});
     } else if (isMongoDB) {
         await client.connect();
         let db = client.db(dbName);
@@ -144,13 +140,17 @@ app.get("/api/:code", async (req, res) => {
             return res.status(404).send("Error: Code not found");
         }
 
-        res.json({status: 200, data: {original: filtered[0].link, shorten: `${config.DOMAIN}/${code}`}});
+        res.json({status: 200, data: {original: filtered[0].link, shorten: `${config.DOMAIN}/s/${code}`}});
     }
 });
 
 app.get("/api/quectoCheck", (req, res) => {
     res.json({status: 200, data: {quecto: true}});
 });
+
+app.get("/generated", (req, res) => {
+    res.sendFile(__dirname + '/public/generated.html');
+})
 
 app.listen(process.env.PORT || config.PORT, async () => {
     if (isJSON) {
