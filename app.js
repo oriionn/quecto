@@ -67,6 +67,7 @@ app.post('/api/form_shorten', multer().none(), async (req, res) => {
 });
 
 app.post('/api/shorten', multer().none(), async (req, res) => {
+    console.log(req.body);
     res.json(await shorten(req.body.link));
 });
 
@@ -121,7 +122,7 @@ app.get("/api/s/:code", async (req, res) => {
         let db = JSON.parse(fs.readFileSync(config.DB_JSON_PATH));
 
         if (!db[code]) {
-            return res.status(404).send("Error: Code not found");
+            return res.status(404).json({status: 404, data: { original: "Error: Code not found", shorten: `${config.DOMAIN}/s/${code}` }})
         }
 
         res.json({status: 200, data: {original: db[code], shorten: `${config.DOMAIN}/s/${code}`}});
@@ -137,7 +138,7 @@ app.get("/api/s/:code", async (req, res) => {
         let filtered = await collection.find({code: code}).toArray();
 
         if (filtered.length === 0) {
-            return res.status(404).send("Error: Code not found");
+            return res.status(404).json({status: 404, data: { original: "Error: Code not found", shorten: `${config.DOMAIN}/s/${code}` }})
         }
 
         res.json({status: 200, data: {original: filtered[0].link, shorten: `${config.DOMAIN}/s/${code}`}});
