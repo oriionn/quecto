@@ -6,6 +6,7 @@ Quecto is a universal, open-source solution that lets you create your own link s
 
 ![Quecto Home Page](docs/home.png)
 ![Quecto Result Page](docs/result.png)
+![Quecto Password Page](docs/password.png)
 
 ## Installation
 
