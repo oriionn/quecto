@@ -3,6 +3,7 @@ const app = express();
 const MongoClient = require('mongodb').MongoClient;
 const fs = require("fs");
 const crypto = require('crypto');
+const config = require('./config');
 
 if (process.env.DOCKER) {
     Object.entries(process.env).forEach(([key, value]) => {
@@ -10,7 +11,6 @@ if (process.env.DOCKER) {
     });
 }
 
-const config = require('./config');
 const url = `mongodb://${config.DB_HOST}:${config.DB_PORT}`;
 const client = new MongoClient(url);
 const dbName = config.DB_NAME
