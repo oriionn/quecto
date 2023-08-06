@@ -4,6 +4,12 @@ const MongoClient = require('mongodb').MongoClient;
 const fs = require("fs");
 const crypto = require('crypto');
 
+if (process.env.DOCKER) {
+    Object.entries(process.env).forEach(([key, value]) => {
+        config[key] = value;
+    });
+}
+
 const config = require('./config');
 const url = `mongodb://${config.DB_HOST}:${config.DB_PORT}`;
 const client = new MongoClient(url);
