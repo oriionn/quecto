@@ -3,6 +3,7 @@ const app = express();
 const MongoClient = require('mongodb').MongoClient;
 const fs = require("fs");
 const SHA256 = require("crypto-js/sha256");
+const {Base64} = require('js-base64');
 const crypto = require('crypto');
 const config = require('./config');
 const arguments = process.argv.slice(2);
@@ -89,11 +90,10 @@ async function shorten(url, password) {
 
 app.post('/api/form_shorten', multer().none(), async (req, res) => {
     let resp = await shorten(req.body.link, req.body.password);
-    res.redirect(`/generated?link=${resp.data.shorten}`);
+    res.redirect(`/generated?link=${Base64.encode(resp.data.shorten)}`);
 });
 
 app.post('/api/shorten', multer().none(), async (req, res) => {
-
     res.json(await shorten(req.body.link, req.body.password));
 });
 
