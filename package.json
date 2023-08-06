@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "crypto": "^1.0.1",
+    "crypto-js": "^4.1.1",
     "express": "^4.18.2",
     "fs": "^0.0.1-security",
     "mongodb": "^5.7.0",

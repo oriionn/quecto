@@ -12,21 +12,23 @@ form {
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
 
+    text-align: center;
     height: 100vh;
     width: 100vw;
 }
 
-form input[type="text"] {
+form input[type="text"], form input[type="password"] {
     outline: none;
     border: none;
+    border-radius: 10px;
 
     width: 50vw;
     padding: 15px;
-    border-radius: 10px 0 0 10px;
     font-size: 30px;
-    margin: 0 !important;
     background-color: white !important;
+    margin: 0 0 10px 0;
 }
 
 form input[type="submit"] {
@@ -34,17 +36,15 @@ form input[type="submit"] {
 
     border: none;
     outline: none;
-    border-radius: 0 10px 10px 0;
+    border-radius: 10px;
 
     font-size: 30px;
     padding: 15px;
     cursor: pointer;
 
+    width: 52vw;
     color: white;
-}
-
-.content {
-    box-shadow: black 0px 0px 10px 0px;
+    height: auto !important;
 }
 
 .qrcode {

@@ -151,9 +151,10 @@ services:
 POST /api/shorten
 ```
 #### Parameters
-| Name   | Type | Description |
-|--------| --- | --- |
-| `link` | `string` | **Required**. The URL to shorten. |
+| Name       | Type | Description                             |
+|------------| --- |-----------------------------------------|
+| `link`     | `string` | **Required**. The URL to shorten.       |
+| `password` | `string` | **Optional**. The password of the link. |
 
 #### Response
 ```json
@@ -173,6 +174,11 @@ POST /api/shorten
 ```http
 GET /api/s/:code
 ```
+
+#### Query
+| Name       | Type | Description                             |
+|------------| --- |-----------------------------------------|
+| `password` | `string` | **Optional**. The password of the link. |
 
 #### Response
 ```json

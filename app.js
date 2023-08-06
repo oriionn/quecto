@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const MongoClient = require('mongodb').MongoClient;
 const fs = require("fs");
+const SHA256 = require("crypto-js/sha256");
 const crypto = require('crypto');
 const config = require('./config');
 const arguments = process.argv.slice(2);
@@ -39,7 +40,7 @@ function generateCode() {
     return Date.now().toString(16) + hex;
 }
 
-async function shorten(url) {
+async function shorten(url, password) {
     let data = {}
 
     if (isJSON) {
@@ -53,7 +54,13 @@ async function shorten(url) {
         let db = JSON.parse(fs.readFileSync(config.DB_JSON_PATH));
         let code = generateCode();
 
-        db[code] = url;
+        if (password) {
+            let hashPass = SHA256(password).toString();
+            db[code] = { link: url, password: hashPass };
+        } else {
+            db[code] = { link: url };
+        }
+
         fs.writeFileSync(config.DB_JSON_PATH, JSON.stringify(db));
         data = { status: 200, data: { original: url, shorten: `${config.DOMAIN}/s/${code}` } };
     } else if (isMongoDB) {
@@ -67,25 +74,32 @@ async function shorten(url) {
         }
         let collection = db.collection('links');
 
-        await collection.insertOne({link: url, code: code});
-        data = {status: 200, data: {original: url, shorten: `${config.DOMAIN}/s/${code}`}};
+        if (password) {
+            let hashPass = SHA256(password).toString();
+            await collection.insertOne({link: url, code: code, password: hashPass});
+        } else {
+            await collection.insertOne({link: url, code: code});
+        }
+
+        data = {status: 200, data: {original: url, shorten: `${config.DOMAIN}/s/${code}`} };
     }
 
     return data;
 }
 
 app.post('/api/form_shorten', multer().none(), async (req, res) => {
-    let resp = await shorten(req.body.link);
+    let resp = await shorten(req.body.link, req.body.password);
     res.redirect(`/generated?link=${resp.data.shorten}`);
 });
 
 app.post('/api/shorten', multer().none(), async (req, res) => {
-    console.log(req.body);
-    res.json(await shorten(req.body.link));
+
+    res.json(await shorten(req.body.link, req.body.password));
 });
 
 app.get("/s/:code", async (req, res) => {
     let code = req.params.code;
+    let password = req.query.password;
 
     if (isJSON) {
         if (!config.DB_JSON_PATH) {
@@ -101,7 +115,24 @@ app.get("/s/:code", async (req, res) => {
             return res.status(404).send("Error: Code not found");
         }
 
-        res.redirect(db[code]);
+        if (db[code].link) {
+            if (db[code].password) {
+                if (password) {
+                    let hashPass = SHA256(password).toString();
+                    if (hashPass === db[code].password) {
+                        res.redirect(db[code].link);
+                    } else {
+                        res.redirect(`/s/${code}`)
+                    }
+                } else {
+                    res.sendFile(__dirname + '/public/password.html');
+                }
+            } else {
+                res.redirect(db[code].link);
+            }
+        } else {
+            res.redirect(db[code]);
+        }
     } else if (isMongoDB) {
         await client.connect();
         let db = client.db(dbName);
@@ -117,12 +148,26 @@ app.get("/s/:code", async (req, res) => {
             return res.status(404).send("Error: Code not found");
         }
 
-        res.redirect(filtered[0].link);
+        if (filtered[0].password) {
+            if (password) {
+                let hashPass = SHA256(password).toString();
+                if (hashPass === filtered[0].password) {
+                    res.redirect(filtered[0].link);
+                } else {
+                    res.redirect(`/s/${code}`)
+                }
+            } else {
+                res.sendFile(__dirname + '/public/password.html');
+            }
+        } else {
+            res.redirect(filtered[0].link);
+        }
     }
 });
 
 app.get("/api/s/:code", async (req, res) => {
     let code = req.params.code;
+    let password = req.query.password;
 
     if (isJSON) {
         if (!config.DB_JSON_PATH) {
@@ -138,7 +183,24 @@ app.get("/api/s/:code", async (req, res) => {
             return res.status(404).json({status: 404, data: { original: "Error: Code not found", shorten: `${config.DOMAIN}/s/${code}` }})
         }
 
-        res.json({status: 200, data: {original: db[code], shorten: `${config.DOMAIN}/s/${code}`}});
+        if (db[code].link) {
+            if (db[code].password) {
+                if (password) {
+                    let hashPass = SHA256(password).toString();
+                    if (hashPass === db[code].password) {
+                        res.json({status: 200, data: {original: db[code].link, shorten: `${config.DOMAIN}/s/${code}`}});
+                    } else {
+                        res.json({status: 401, data: { original: "Error: Unauthorized", shorten: `${config.DOMAIN}/s/${code}` }})
+                    }
+                } else {
+                    res.json({status: 401, data: { original: "Error: Unauthorized", shorten: `${config.DOMAIN}/s/${code}` }})
+                }
+            } else {
+                res.json({status: 200, data: {original: db[code].link, shorten: `${config.DOMAIN}/s/${code}`}});
+            }
+        } else {
+            res.json({status: 200, data: {original: db[code], shorten: `${config.DOMAIN}/s/${code}`}});
+        }
     } else if (isMongoDB) {
         await client.connect();
         let db = client.db(dbName);
@@ -154,7 +216,20 @@ app.get("/api/s/:code", async (req, res) => {
             return res.status(404).json({status: 404, data: { original: "Error: Code not found", shorten: `${config.DOMAIN}/s/${code}` }})
         }
 
-        res.json({status: 200, data: {original: filtered[0].link, shorten: `${config.DOMAIN}/s/${code}`}});
+        if (filtered[0].password) {
+            if (password) {
+                let hashPass = SHA256(password).toString();
+                if (hashPass === filtered[0].password) {
+                    res.json({status: 200, data: {original: filtered[0].link, shorten: `${config.DOMAIN}/s/${code}`}});
+                } else {
+                    res.json({status: 401, data: { original: "Error: Unauthorized", shorten: `${config.DOMAIN}/s/${code}` }})
+                }
+            } else {
+                res.json({status: 401, data: { original: "Error: Unauthorized", shorten: `${config.DOMAIN}/s/${code}` }});
+            }
+        } else {
+            res.json({status: 200, data: {original: filtered[0].link, shorten: `${config.DOMAIN}/s/${code}`}});
+        }
     }
 });
 
