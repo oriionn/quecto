@@ -14,7 +14,11 @@ if (process.env.DOCKER) {
     config.PORT = arguments[0];
 }
 
-const url = `mongodb://${config.DB_HOST}:${config.DB_PORT}`;
+
+let url = `mongodb://${config.DB_HOST}:${config.DB_PORT}/?authMechanism=DEFAULT`;
+if (config.DB_USER && config.DB_PASS) {
+    url = `mongodb://${config.DB_USER}:${config.DB_PASS}@${config.DB_HOST}:${config.DB_PORT}/?authMechanism=DEFAULT`;
+}
 const client = new MongoClient(url);
 const dbName = config.DB_NAME
 const isJSON = config.DB_TYPE.toLowerCase() === "json";
