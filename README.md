@@ -67,6 +67,7 @@ docker run -d \
   oriionn/quecto
 ```
 If you use MongoDB:
+If you don't use username and password:
 ```bash
 docker run -d \
   -p [PORT]:3000 \
@@ -75,13 +76,27 @@ docker run -d \
   -e DB_HOST=127.0.0.1 \
   -e DB_PORT=27017 \
   -e DB_NAME=quecto \
+  oriionn/quecto
+```
+If you use username and password:
+```bash
+docker run -d \
+  -p [PORT]:3000 \
+  -e DOMAIN=http://localhost \
+  -e DB_TYPE=mongodb \
+  -e DB_HOST=127.0.0.1 \
+  -e DB_PORT=27017 \
+  -e DB_NAME=quecto \
+  -e DB_USER=username \
+  -e DB_PASS=password \
+  oriionn/quecto
 ```
 **⚠ Don't edit :3000**
 
 #### Docker Compose
 If you use JSON:
 ```yaml
-version: "3.9"
+version: "3.8"
 services:
   quecto:
     image: oriionn/quecto
@@ -94,8 +109,9 @@ services:
       - DB_JSON_PATH=./db.json
 ```
 If you use MongoDB:
+If you don't use username and password:
 ```yaml
-version: "3.9"
+version: "3.8"
 services:
   quecto:
     image: oriionn/quecto
@@ -108,6 +124,24 @@ services:
       - DB_HOST=127.0.0.1
       - DB_PORT=27017
       - DB_NAME=quecto
+```
+If you use username and password:
+```yaml
+version: "3.8"
+services:
+  quecto:
+    image: oriionn/quecto
+    container_name: quecto
+    ports:
+      - "[PORT]:3000"
+    environment:
+      - DOMAIN=http://localhost
+      - DB_TYPE=mongodb
+      - DB_HOST=127.0.0.1
+      - DB_PORT=27017
+      - DB_NAME=quecto
+      - DB_USER=username 
+      - DB_PASS=password
 ```
 **⚠ Don't edit :3000**
 
