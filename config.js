@@ -12,8 +12,6 @@ module.exports = {
   DB_HOST: "127.0.0.1",
   DB_PORT: 27017,
   DB_NAME: "quecto",
-  DB_USER: "",
-  DB_PASS: "",
 
   // json config (if DB_TYPE is json)
   DB_JSON_PATH: "./db.json"
