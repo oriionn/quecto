@@ -31,5 +31,11 @@ jobs:
       - name: Build Docker image
         run: docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/quecto:${{ github.event.release.tag_name }} .
 
+      - name: Tag Docker image as latest
+        run: docker tag ${{ secrets.DOCKER_HUB_USERNAME }}/quecto:${{ github.event.release.tag_name }} ${{ secrets.DOCKER_HUB_USERNAME }}/quecto:latest
+
       - name: Push Docker image to Docker Hub
         run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/quecto:${{ github.event.release.tag_name }}
+
+      - name: Push Docker image with latest tag to Docker Hub
+        run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/quecto:latest
