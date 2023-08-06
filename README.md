@@ -8,12 +8,15 @@ Quecto is a universal, open-source solution that lets you create your own link s
 ![Quecto Result Page](docs/result.png)
 
 ## Installation
-### Prerequisites
+
+### Node JS
+
+#### Prerequisites
 - Node JS 14.0.0 or higher
 - NPM 6.0.0 or higher
 - MongoDB 4.0.0 or higher (if you use MongoDB)
 
-### Installation
+#### Installation
 1. Clone the repository
 ```bash
 git clone https://github.com/oriionn/quecto.git
@@ -50,6 +53,63 @@ module.exports = {
 ```bash
 npm start
 ```
+
+### Docker
+#### Docker Run
+If you use JSON:
+```bash
+docker run -d \
+  -p [PORT]:3000 \
+  -e DOMAIN=http://localhost \
+  -e DB_TYPE=json \
+  -e DB_JSON_PATH=./db.json \
+  --name quecto \
+  oriionn/quecto
+```
+If you use MongoDB:
+```bash
+docker run -d \
+  -p [PORT]:3000 \
+  -e DOMAIN=http://localhost \
+  -e DB_TYPE=mongodb \
+  -e DB_HOST=127.0.0.1 \
+  -e DB_PORT=27017 \
+  -e DB_NAME=quecto \
+```
+**⚠ Don't edit :3000**
+
+#### Docker Compose
+If you use JSON:
+```yaml
+version: "3.9"
+services:
+  quecto:
+    image: oriionn/quecto
+    container_name: quecto
+    ports:
+      - "[PORT]:3000"
+    environment:
+      - DOMAIN=http://localhost
+      - DB_TYPE=json
+      - DB_JSON_PATH=./db.json
+```
+If you use MongoDB:
+```yaml
+version: "3.9"
+services:
+  quecto:
+    image: oriionn/quecto
+    container_name: quecto
+    ports:
+      - "[PORT]:3000"
+    environment:
+      - DOMAIN=http://localhost
+      - DB_TYPE=mongodb
+      - DB_HOST=127.0.0.1
+      - DB_PORT=27017
+      - DB_NAME=quecto
+```
+**⚠ Don't edit :3000**
 
 ## API
 ### Create a short link
