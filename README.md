@@ -210,5 +210,7 @@ GET /api/quectoCheck
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
+![Contributors](https://contrib.rocks/image?repo=oriionn/quecto)
+
 ## License
 [GPL3](https://github.com/oriionn/quecto/blob/main/LICENSE)
