@@ -36,8 +36,9 @@ app.get('/', (req, res) => {
 
 let lookup;
 async function checkURL(url){
+    if (config.SAFE_BROWSING_APIKEY === "") return undefined;
     if(!lookup) lookup = require('safe-browse-url-lookup')({ apiKey: config.SAFE_BROWSING_APIKEY });
-    return await lookup.checkSingle(url)
+    return !(await lookup.checkSingle(url))
 }
 
 function generateCode() {
@@ -126,8 +127,8 @@ app.get("/s/:code", async (req, res) => {
                 if (password) {
                     let hashPass = SHA256(password).toString();
                     if (hashPass === db[code].password) {
-                        let isSafe = !(await checkURL(db[code].link));
-                        if (isSafe) res.redirect(db[code].link);
+                        let isSafe = (await checkURL(db[code].link));
+                        if (isSafe || isSafe === undefined) res.redirect(db[code].link);
                         else res.redirect(`/warning?link=${Base64.encode(db[code].link)}`);
                     } else {
                         res.redirect(`/s/${code}`)
@@ -136,13 +137,13 @@ app.get("/s/:code", async (req, res) => {
                     res.sendFile(__dirname + '/public/password.html');
                 }
             } else {
-                let isSafe = !(await checkURL(db[code].link));
-                if (isSafe) res.redirect(db[code].link);
+                let isSafe = (await checkURL(db[code].link));
+                if (isSafe || isSafe === undefined) res.redirect(db[code].link);
                 else res.redirect(`/warning?link=${Base64.encode(db[code].link)}`);
             }
         } else {
-            let isSafe = !(await checkURL(db[code]));
-            if (isSafe) res.redirect(db[code]);
+            let isSafe = (await checkURL(db[code]));
+            if (isSafe || isSafe === undefined) res.redirect(db[code]);
             else res.redirect(`/warning?link=${Base64.encode(db[code])}`);
         }
     } else if (isMongoDB) {
@@ -164,8 +165,8 @@ app.get("/s/:code", async (req, res) => {
             if (password) {
                 let hashPass = SHA256(password).toString();
                 if (hashPass === filtered[0].password) {
-                    let isSafe = !(await checkURL(filtered[0].link));
-                    if (isSafe) res.redirect(filtered[0].link);
+                    let isSafe = (await checkURL(filtered[0].link));
+                    if (isSafe || isSafe === undefined) res.redirect(filtered[0].link);
                     else res.redirect(`/warning?link=${Base64.encode(filtered[0].link)}`);
                 } else {
                     res.redirect(`/s/${code}`)
@@ -174,8 +175,8 @@ app.get("/s/:code", async (req, res) => {
                 res.sendFile(__dirname + '/public/password.html');
             }
         } else {
-            let isSafe = !(await checkURL(filtered[0].link));
-            if (isSafe) res.redirect(filtered[0].link);
+            let isSafe = (await checkURL(filtered[0].link));
+            if (isSafe || isSafe === undefined) res.redirect(filtered[0].link);
             else res.redirect(`/warning?link=${Base64.encode(filtered[0].link)}`);
         }
     }
@@ -204,7 +205,7 @@ app.get("/api/s/:code", async (req, res) => {
                 if (password) {
                     let hashPass = SHA256(password).toString();
                     if (hashPass === db[code].password) {
-                        let isSafe = !(await checkURL(db[code].link));
+                        let isSafe = (await checkURL(db[code].link));
                         res.json({status: 200, data: {original: db[code].link, shorten: `${config.DOMAIN}/s/${code}`, safe: isSafe }});
                     } else {
                         res.json({status: 401, data: { original: "Error: Unauthorized", shorten: `${config.DOMAIN}/s/${code}` }})
@@ -213,11 +214,11 @@ app.get("/api/s/:code", async (req, res) => {
                     res.json({status: 401, data: { original: "Error: Unauthorized", shorten: `${config.DOMAIN}/s/${code}` }})
                 }
             } else {
-                let isSafe = !(await checkURL(db[code].link));
+                let isSafe = (await checkURL(db[code].link));
                 res.json({status: 200, data: {original: db[code].link, shorten: `${config.DOMAIN}/s/${code}`, safe: isSafe }});
             }
         } else {
-            let isSafe = !(await checkURL(db[code]));
+            let isSafe = (await checkURL(db[code]));
             res.json({status: 200, data: {original: db[code], shorten: `${config.DOMAIN}/s/${code}`, safe: isSafe }});
         }
     } else if (isMongoDB) {
@@ -239,7 +240,8 @@ app.get("/api/s/:code", async (req, res) => {
             if (password) {
                 let hashPass = SHA256(password).toString();
                 if (hashPass === filtered[0].password) {
-                    res.json({status: 200, data: {original: filtered[0].link, shorten: `${config.DOMAIN}/s/${code}`}});
+                    let isSafe = (await checkURL(filtered[0].link));
+                    res.json({status: 200, data: {original: filtered[0].link, shorten: `${config.DOMAIN}/s/${code}`, safe: isSafe}});
                 } else {
                     res.json({status: 401, data: { original: "Error: Unauthorized", shorten: `${config.DOMAIN}/s/${code}` }})
                 }
@@ -247,7 +249,8 @@ app.get("/api/s/:code", async (req, res) => {
                 res.json({status: 401, data: { original: "Error: Unauthorized", shorten: `${config.DOMAIN}/s/${code}` }});
             }
         } else {
-            res.json({status: 200, data: {original: filtered[0].link, shorten: `${config.DOMAIN}/s/${code}`}});
+            let isSafe = (await checkURL(filtered[0].link));
+            res.json({status: 200, data: {original: filtered[0].link, shorten: `${config.DOMAIN}/s/${code}`, safe: isSafe }});
         }
     }
 });
