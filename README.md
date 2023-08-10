@@ -196,7 +196,8 @@ GET /api/s/:code
   "status": 200,
   "data": {
     "original": "https://google.com",
-    "shorten": "http://quecto.local/abc123"
+    "shorten": "http://quecto.local/abc123",
+    "safe": true
   }
 }
 ```
