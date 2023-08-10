@@ -34,6 +34,7 @@ module.exports = {
 
   // The domain name of the website
   DOMAIN: "http://localhost",
+  SAFE_BROWSING_APIKEY: "", // Your Google Safe Browsing API key
 
   // Database type: json, mongodb
   DB_TYPE: "json",
@@ -64,6 +65,7 @@ docker run -d \
   -e DOMAIN=http://localhost \
   -e DB_TYPE=json \
   -e DB_JSON_PATH=./db.json \
+  -e SAFE_BROWSING_APIKEY=YOUR_SAFEBROWSING_APIKEY \
   --name quecto \
   oriionn/quecto
 ```
@@ -77,6 +79,8 @@ docker run -d \
   -e DB_HOST=127.0.0.1 \
   -e DB_PORT=27017 \
   -e DB_NAME=quecto \
+  -e SAFE_BROWSING_APIKEY=YOUR_SAFEBROWSING_APIKEY \
+  --name quecto \
   oriionn/quecto
 ```
 If you use username and password:
@@ -90,6 +94,8 @@ docker run -d \
   -e DB_NAME=quecto \
   -e DB_USER=username \
   -e DB_PASS=password \
+  -e SAFE_BROWSING_APIKEY=YOUR_SAFEBROWSING_APIKEY \
+  --name quecto \
   oriionn/quecto
 ```
 **⚠ Don't edit :3000**
@@ -108,6 +114,7 @@ services:
       - DOMAIN=http://localhost
       - DB_TYPE=json
       - DB_JSON_PATH=./db.json
+      - SAFE_BROWSING_APIKEY=YOUR_SAFEBROWSING_APIKEY
 ```
 If you use MongoDB:
 If you don't use username and password:
@@ -125,6 +132,7 @@ services:
       - DB_HOST=127.0.0.1
       - DB_PORT=27017
       - DB_NAME=quecto
+      - SAFE_BROWSING_APIKEY=YOUR_SAFEBROWSING_APIKEY
 ```
 If you use username and password:
 ```yaml
@@ -143,6 +151,7 @@ services:
       - DB_NAME=quecto
       - DB_USER=username 
       - DB_PASS=password
+      - SAFE_BROWSING_APIKEY=YOUR_SAFEBROWSING_APIKEY
 ```
 **⚠ Don't edit :3000**
 
