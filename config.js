@@ -4,7 +4,7 @@ module.exports = {
 
   // The domain name of the website
   DOMAIN: "http://localhost",
-  SAFE_BROWSING_APIKEY: "AIzaSyBovR1bR-aI4KiXZ9AB8MFLIqYROK2V57Y",
+  SAFE_BROWSING_APIKEY: "",
 
   // Database type: json, mongodb
   DB_TYPE: "json",
