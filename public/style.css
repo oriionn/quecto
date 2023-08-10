@@ -52,3 +52,25 @@ form input[type="submit"] {
     bottom: 10px;
     right: 10px;
 }
+
+h1 {
+    color: red;
+    font-size: 30px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+button {
+    background: #2980b9;
+
+    border: none;
+    outline: none;
+    border-radius: 10px;
+
+    font-size: 30px;
+    padding: 15px;
+    cursor: pointer;
+
+    width: 52vw;
+    color: white;
+    height: auto !important;
+}

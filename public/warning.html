@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Quecto</title>
+
+    <link rel="stylesheet" href="/public/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/js-base64@3.7.5/base64.min.js"></script>
+</head>
+<body>
+<form>
+    <div class="content">
+        <h1>Warning ! Google has identified the link as potentially dangerous.</h1>
+        <button>Continue</button>
+    </div>
+</form>
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const link = params.get("link");
+  document.querySelector("button").onclick = () => window.location.href = Base64.decode(link);
+
+  document.querySelector("form").onsubmit = (e) => e.preventDefault();
+</script>
+</body>
+</html>
