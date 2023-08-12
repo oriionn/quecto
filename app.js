@@ -287,5 +287,5 @@ app.listen(process.env.PORT || config.PORT, async () => {
         if (!collection) collection = await db.createCollection('links');
     }
 
-    console.log('Quecto listening on port ' + config.PORT + '!');
+    console.log('Quecto listening on port ' + process.env.PORT || config.PORT + '!');
 });
