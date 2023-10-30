@@ -134,7 +134,7 @@ app.get("/s/:code", async (req, res) => {
         let db = JSON.parse(fs.readFileSync(config.DB_JSON_PATH));
 
         if (!db[code]) {
-            return res.status(404).send("Error: Code not found");
+            return res.redirect("/?error=" + Base64.encode("Error: Code not found"));
         }
 
         if (db[code].link) {
@@ -173,7 +173,7 @@ app.get("/s/:code", async (req, res) => {
         let filtered = await collection.find({code: code}).toArray();
 
         if (filtered.length === 0) {
-            return res.status(404).send("Error: Code not found");
+            return res.redirect("/?error=" + Base64.encode("Error: Code not found"));
         }
 
         if (filtered[0].password) {
@@ -204,7 +204,7 @@ app.get("/api/s/:code", async (req, res) => {
     if (isJSON) {
         if (!config.DB_JSON_PATH) {
             console.log("Error: DB_JSON_PATH not found");
-            return res.status(500).send("Error: DB_JSON_PATH not found");
+            return res.status(500).send({ status: 500, data: {}, message: "Error: DB_JSON_PATH not found" });
         } else {
             if (!fs.existsSync(config.DB_JSON_PATH)) fs.writeFileSync(config.DB_JSON_PATH, JSON.stringify({}));
         }
@@ -212,7 +212,7 @@ app.get("/api/s/:code", async (req, res) => {
         let db = JSON.parse(fs.readFileSync(config.DB_JSON_PATH));
 
         if (!db[code]) {
-            return res.status(404).json({status: 404, data: { original: "Error: Code not found", shorten: `${config.DOMAIN}/s/${code}` }})
+            return res.status(404).json({status: 404, data: {}, message: "Error: Code not found" })
         }
 
         if (db[code].link) {
@@ -223,10 +223,10 @@ app.get("/api/s/:code", async (req, res) => {
                         let isSafe = (await checkURL(db[code].link));
                         res.json({status: 200, data: {original: db[code].link, shorten: `${config.DOMAIN}/s/${code}`, safe: isSafe }});
                     } else {
-                        res.json({status: 401, data: { original: "Error: Unauthorized", shorten: `${config.DOMAIN}/s/${code}` }})
+                        res.json({status: 401, data: {}, message: "Error: Unauthorized" })
                     }
                 } else {
-                    res.json({status: 401, data: { original: "Error: Unauthorized", shorten: `${config.DOMAIN}/s/${code}` }})
+                    res.json({status: 401, data: {}, message: "Error: Unauthorized" })
                 }
             } else {
                 let isSafe = (await checkURL(db[code].link));
@@ -240,15 +240,15 @@ app.get("/api/s/:code", async (req, res) => {
         await client.connect();
         let db = client.db(dbName);
         if (!db) {
-            console.log("Error: db not found");
-            return;
+            console.log("Error: DB not found");
+            return res.status(500).json({status: 500, data: {}, message: "Error: DB not found." })
         }
         let collection = db.collection('links');
 
         let filtered = await collection.find({code: code}).toArray();
 
         if (filtered.length === 0) {
-            return res.status(404).json({status: 404, data: { original: "Error: Code not found", shorten: `${config.DOMAIN}/s/${code}` }})
+            return res.status(404).json({status: 404, data: {}, message: "Error: Code not found" })
         }
 
         if (filtered[0].password) {
@@ -258,10 +258,10 @@ app.get("/api/s/:code", async (req, res) => {
                     let isSafe = (await checkURL(filtered[0].link));
                     res.json({status: 200, data: {original: filtered[0].link, shorten: `${config.DOMAIN}/s/${code}`, safe: isSafe}});
                 } else {
-                    res.json({status: 401, data: { original: "Error: Unauthorized", shorten: `${config.DOMAIN}/s/${code}` }})
+                    res.status(401).json({status: 401, data: {}, message: "Error: Unauthorized" });
                 }
             } else {
-                res.json({status: 401, data: { original: "Error: Unauthorized", shorten: `${config.DOMAIN}/s/${code}` }});
+                res.status(401).json({status: 401, data: {}, message: "Error: Unauthorized" });
             }
         } else {
             let isSafe = (await checkURL(filtered[0].link));

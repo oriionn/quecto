@@ -161,10 +161,11 @@ services:
 POST /api/shorten
 ```
 #### Parameters
-| Name       | Type | Description                             |
-|------------| --- |-----------------------------------------|
-| `link`     | `string` | **Required**. The URL to shorten.       |
-| `password` | `string` | **Optional**. The password of the link. |
+| Name          | Type     | Description                                |
+|---------------|----------|--------------------------------------------|
+| `link`        | `string` | **Required**. The URL to shorten.          |
+| `password`    | `string` | **Optional**. The password of the link.    |
+| `custom_code` | `string` | **Optional**. The custom code of the link. |
 
 #### Response
 ```json
@@ -172,13 +173,25 @@ POST /api/shorten
   "status": 200,
   "data": {
     "original": "https://google.com",
-    "shorten": "http://quecto.local/abc123"
+    "shorten": "http://quecto.local/s/abc123"
   }
 }
 ```
 (The type of the body is `multipart/form-data`)
-
 (Precise the domain name in the `config.js` file)
+
+#### Error
+<details>
+
+```json
+{
+    "status": [STATUS],
+    "data": {},
+    "message": "Error: [ERROR]"
+}
+```
+
+</details>
 
 ### Get a short link
 ```http
@@ -196,11 +209,24 @@ GET /api/s/:code
   "status": 200,
   "data": {
     "original": "https://google.com",
-    "shorten": "http://quecto.local/abc123",
+    "shorten": "http://quecto.local/s/abc123",
     "safe": true
   }
 }
 ```
+
+#### Error
+<details>
+
+```json
+{
+    "status": [STATUS],
+    "data": {},
+    "message": "Error: [ERROR]"
+}
+```
+
+</details>
 
 ### Know if this instance is a quecto instance
 ```http
