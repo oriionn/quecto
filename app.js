@@ -48,19 +48,28 @@ function generateCode() {
     return Date.now().toString(16) + hex;
 }
 
-async function shorten(url, password) {
+async function shorten(url, password, custom) {
     let data = {}
+    let regex = /^(http|https):\/\/[^\s/$.?#].[^\s]*$/;
+
+    if (!regex.test(url)) return { status: 400, data: {}, message: "Error: Invalid URL" };
 
     if (isJSON) {
         if (!config.DB_JSON_PATH) {
             console.log("Error: DB_JSON_PATH not found");
-            return res.status(500).send("Error: DB_JSON_PATH not found");
+            return { status: 500, data: {}, message: "Error: DB_JSON_PATH not found" }
         } else {
             if (!fs.existsSync(config.DB_JSON_PATH)) fs.writeFileSync(config.DB_JSON_PATH, JSON.stringify({}));
         }
 
         let db = JSON.parse(fs.readFileSync(config.DB_JSON_PATH));
-        let code = generateCode();
+        let code = "";
+        if (custom) {
+            if (db[custom]) return { status: 400, data: {}, message: "Error: Code already exists" };
+            code = custom;
+        } else {
+            code = generateCode();
+        }
 
         if (password) {
             let hashPass = SHA256(password).toString();
@@ -72,15 +81,20 @@ async function shorten(url, password) {
         fs.writeFileSync(config.DB_JSON_PATH, JSON.stringify(db));
         data = { status: 200, data: { original: url, shorten: `${config.DOMAIN}/s/${code}` } };
     } else if (isMongoDB) {
-        let code = generateCode();
-
         await client.connect();
         let db = client.db(dbName);
         if (!db) {
             console.log("Error: db not found");
-            return;
+            return { status: 500, data: {}, message: "Error: DB not found." }
         }
         let collection = db.collection('links');
+
+        let code = generateCode();
+        if (custom) {
+            let filtered = await collection.find({code: custom}).toArray();
+            if (filtered.length > 0) return { status: 400, data: {}, message: "Error: Code already exists" };
+            code = custom;
+        }
 
         if (password) {
             let hashPass = SHA256(password).toString();
@@ -96,12 +110,13 @@ async function shorten(url, password) {
 }
 
 app.post('/api/form_shorten', multer().none(), async (req, res) => {
-    let resp = await shorten(req.body.link, req.body.password);
+    let resp = await shorten(req.body.link, req.body.password, req.body.custom_code);
+    if (!resp.data.shorten) return res.redirect(`/?error=${Base64.encode(resp.message)}`);
     res.redirect(`/generated?link=${Base64.encode(resp.data.shorten)}`);
 });
 
 app.post('/api/shorten', multer().none(), async (req, res) => {
-    res.json(await shorten(req.body.link, req.body.password));
+    res.json(await shorten(req.body.link, req.body.password, req.body.custom_code));
 });
 
 app.get("/s/:code", async (req, res) => {
@@ -288,5 +303,5 @@ app.listen(process.env.PORT || config.PORT, async () => {
     }
 
     const port = process.env.PORT || config.PORT;
-	console.log(`Quecto listening on port ${port}!`);
+	  console.log(`Quecto listening on port ${port}!`);
 });

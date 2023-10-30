@@ -5,14 +5,25 @@
     <title>Quecto</title>
 
     <link rel="stylesheet" href="/public/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/js-base64@3.7.5/base64.min.js"></script>
 </head>
 <body>
     <form action="/api/form_shorten" method="post">
         <div class="content">
             <input type="text" name="link" placeholder="Link" required>
             <input type="password" name="password" placeholder="Password"> <br>
+            <input type="text" name="custom_code" placeholder="Custom Short Code"> <br>
             <input type="submit" value="Shorten">
         </div>
     </form>
+
+    <script>
+        window.onload = () => {
+            const searchParams = new URLSearchParams(window.location.search);
+            const error = searchParams.get('error');
+            if (!error) return;
+            alert(Base64.decode(error));
+        }
+    </script>
 </body>
 </html>
