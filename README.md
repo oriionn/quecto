@@ -178,6 +178,7 @@ POST /api/shorten
 }
 ```
 (The type of the body is `multipart/form-data`)
+
 (Precise the domain name in the `config.js` file)
 
 #### Error
