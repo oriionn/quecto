@@ -1,0 +1,23 @@
+{
+  "name": "example-with-unocss",
+  "type": "module",
+  "scripts": {
+    "dev": "vinxi dev",
+    "build": "vinxi build",
+    "start": "vinxi start"
+  },
+  "dependencies": {
+    "@solidjs/router": "^0.15.0",
+    "@solidjs/start": "^1.0.10",
+    "@unocss/preset-web-fonts": "^0.65.1",
+    "@unocss/reset": "^0.59.2",
+    "@unocss/transformer-variant-group": "^0.65.1",
+    "lucide-solid": "^0.465.0",
+    "solid-js": "^1.9.2",
+    "unocss": "^0.59.2",
+    "vinxi": "^0.4.3"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
