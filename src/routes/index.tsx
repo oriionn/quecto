@@ -6,12 +6,12 @@ import Unshorten from "~/components/Unshorten";
 const Home: Component = () => {
   return (
     <main class="min-h-screen min-w-screen bg-background text-white font-noto">
-      <div class="p-12 gap-12 grid grid-cols-2 grid-rows-1 w-full h-full">
+      <div class="p-6 sm:(p-12) flex flex-col lg:(grid grid-cols-2 grid-rows-1 gap-12) w-full h-full">
         <div class="first-col">
           <Shorten />
           <History />
         </div>
-        <div class="second-col">
+        <div class="second-col mt-2 lg:mt-0">
           <Unshorten />
         </div>
       </div>

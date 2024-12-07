@@ -6,16 +6,16 @@ const History: Component = () => {
     <div class="card flex flex-col mt-2">
       <h1 class="text-2xl mb-5 font-bold">History</h1>
       <div class="flex flex-row justify-between items-center">
-        <span class="text-lg">Original link</span>
+        <span class="text-lg hidden xl:block">Original link</span>
         <span class="text-lg">Shortened link</span>
         <span class="text-lg">Actions</span>
       </div>
       <div class="flex flex-row justify-between items-center mt-2">
-        <div class="left">
+        <div class="left hidden xl:block">
           <a href="https://google.com" class="text-blue-500 text-lg hover:text-blue-400"
              target="_blank">https://google.com</a>
         </div>
-        <div class="center">
+        <div class="center mr-3">
           <a href="https://s.oriondev.fr/abcde" class="text-blue-500 text-lg hover:text-blue-400"
              target="_blank">https://s.oriondev.fr/abcde</a>
         </div>
@@ -29,11 +29,11 @@ const History: Component = () => {
         </div>
       </div>
       <div class="flex flex-row justify-between items-center mt-2">
-        <div class="left">
+        <div class="left hidden xl:block">
           <a href="https://google.com" class="text-blue-500 text-lg hover:text-blue-400"
              target="_blank">https://google.com</a>
         </div>
-        <div class="center">
+        <div class="center mr-3">
           <a href="https://s.oriondev.fr/abcde" class="text-blue-500 text-lg hover:text-blue-400"
              target="_blank">https://s.oriondev.fr/abcde</a>
         </div>
