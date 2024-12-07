@@ -1,15 +1,53 @@
-import {Component, createSignal, Show} from "solid-js";
-import {ChevronDown, ChevronUp, Eye, EyeOff} from "lucide-solid";
+import {Component, createSignal, Setter, Show} from "solid-js";
+import {ChevronDown, ChevronUp, Copy, CopyCheck, Eye, EyeOff} from "lucide-solid";
 import Expandable from "~/components/Expandable";
 
 const Shorten: Component = () => {
+  const [shortened, setShortened] = createSignal(false);
+  const [copied, setCopied] = createSignal(false);
+
+  return (
+    <div class="card">
+      <Show when={shortened()} fallback={
+        <ShortenForm setShortened={setShortened} />
+      }>
+        <div>
+          <h1 class="text-2xl font-bold">Link shortened!</h1>
+          <div class="flex flex-row items-center">
+            <input type="text" class="input cursor-not-allowed !bg-white" id="shortened-link" name="shortened-link"
+                   value="https://s.oriondev.fr/abcde" disabled/>
+            <Show when={!copied()} fallback={<CopyCheck class="ml-[-35px] mt-2" color="black"/>}>
+              <Copy class="ml-[-35px] mt-2 cursor-pointer" color="black" onClick={
+                () => {
+                  window.navigator.clipboard.writeText("https://s.oriondev.fr/abcde").then(() => {
+                    setCopied(true);
+                    setTimeout(() => setCopied(false), 2000);
+                  })
+                }
+              } />
+            </Show>
+          </div>
+          <div class="w-full flex flex-row justify-end mt-3">
+            <button
+              class="bg-button hover:bg-button-hover px-4 py-2 border-none outline-none rounded-lg text-black"
+              onClick={() => setShortened(false)}
+            >Ok
+            </button>
+          </div>
+        </div>
+      </Show>
+    </div>
+  )
+}
+
+const ShortenForm: Component<{ setShortened: Setter<boolean> }> = (props) => {
   const [passwordProtection, setPasswordProtection] = createSignal(false);
   const [showPassword, setShowPassword] = createSignal(false);
   const [useCustomShortCode, setUseCustomShortCode] = createSignal(false);
   const [isSelectOpen, setIsSelectOpen] = createSignal(false);
   
   return (
-    <div class="card">
+    <div>
       <h1 class="text-2xl font-bold">Shorten a link</h1>
       <input type="text" class="input" id="link" name="link" placeholder="Your link"/>
       <div class="flex flex-row items-center">
@@ -66,11 +104,12 @@ const Shorten: Component = () => {
       </Expandable>
       <div class="final w-full flex flex-row justify-end mt-3">
         <button
-          class="bg-button hover:bg-button-hover px-4 py-2 border-none outline-none rounded-lg text-black">Shorten
+          class="bg-button hover:bg-button-hover px-4 py-2 border-none outline-none rounded-lg text-black"
+          onClick={() => props.setShortened(true)}
+        >Shorten
         </button>
       </div>
     </div>
   )
 }
-
 export default Shorten;
