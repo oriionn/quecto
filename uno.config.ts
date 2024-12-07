@@ -9,7 +9,8 @@ export default defineConfig({
     theme: {
         colors: {
           background: "#191E24",
-          button: "#d2e0f7"
+          button: "#d2e0f7",
+          "button-hover": "#dce6f6"
         }
     },
     shortcuts: {
