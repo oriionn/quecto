@@ -16,11 +16,19 @@ const Home: Component = () => {
         </div>
       </div>
       <footer class="p-5 flex flex-row flex-wrap gap-x-2">
-        <a href="https://github.com/oriionn/quecto" class="text-blue-500 hover:text-blue-400" target="_blank">Source code</a>
+        <a href="https://github.com/oriionn/quecto" class="text-blue-500 hover:text-blue-400" target="_blank">Source
+          code</a>
         <span>•</span>
-        <a href="https://github.com/oriionn/quecto" class="text-blue-500 hover:text-blue-400" target="_blank">Documentation</a>
+        <a href="https://github.com/oriionn/quecto" class="text-blue-500 hover:text-blue-400"
+           target="_blank">Documentation</a>
         <span>•</span>
-        <span>Made with <span class="font-emoji">❤</span> by <a href="https://github.com/oriionn" class="text-blue-500 hover:text-blue-400" target="_blank">Orion</a></span>
+        <span>Under license <a href="https://choosealicense.com/licenses/gpl-3.0/"
+                               class="text-blue-500 hover:text-blue-400"
+                               target="_blank">GPL 3.0</a></span>
+        <span>•</span>
+        <span>Made with <span class="font-emoji">❤</span> by <a href="https://github.com/oriionn"
+                                                                class="text-blue-500 hover:text-blue-400"
+                                                                target="_blank">Orion</a></span>
       </footer>
     </main>
   );
