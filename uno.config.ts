@@ -23,6 +23,7 @@ export default defineConfig({
           provider: "google",
           fonts: {
             noto: 'Noto Sans',
+            emoji: "Noto Color Emoji",
           }
         })
       ]
