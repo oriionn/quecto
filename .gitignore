@@ -24,3 +24,5 @@ app.config.timestamp_*.js
 # System Files
 .DS_Store
 Thumbs.db
+
+data/*
