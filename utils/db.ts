@@ -1,5 +1,6 @@
 import { Database } from "bun:sqlite";
 import { Link } from "../models/link";
+import { query } from "@solidjs/router";
 
 class SQLiteDataHandler {
     private db: Database;
@@ -10,6 +11,8 @@ class SQLiteDataHandler {
         this.db
         .query(`CREATE TABLE IF NOT EXISTS links (short_code TEXT PRIMARY KEY, link TEXT NOT NULL, expiration INT NOT NULL, password TEXT, created_at DATETIME DEFAULT CURRENT_TIMESTAMP)`)
         .run()
+
+        this.db.query("PRAGMA journal_mode=WAL;").run()
     }
 
     get(short_code: string, password?: boolean) {
@@ -37,7 +40,7 @@ class SQLiteDataHandler {
             return {
                 short_code, link, expiration
             }
-        } catch (error) {            
+        } catch (error) {                        
             return null;
         }
     }
