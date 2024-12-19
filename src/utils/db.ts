@@ -1,5 +1,5 @@
 import { Database } from "bun:sqlite";
-import { Link } from "../models/link";
+import { Link } from "~/models/link";
 import { query } from "@solidjs/router";
 
 class SQLiteDataHandler {
@@ -9,7 +9,7 @@ class SQLiteDataHandler {
         this.db = new Database("data/db.sqlite", {strict: true})
 
         this.db
-        .query(`CREATE TABLE IF NOT EXISTS links (short_code TEXT PRIMARY KEY, link TEXT NOT NULL, expiration INT NOT NULL, password TEXT, created_at DATETIME DEFAULT CURRENT_TIMESTAMP)`)
+        .query(`CREATE TABLE IF NOT EXISTS links (short_code TEXT PRIMARY KEY, link TEXT NOT NULL, expiration INT NOT NULL, password TEXT, delete_token TEXT NOT NULL, created_at DATETIME DEFAULT CURRENT_TIMESTAMP)`)
         .run()
 
         this.db.query("PRAGMA journal_mode=WAL;").run()
@@ -33,14 +33,15 @@ class SQLiteDataHandler {
         return results;
     }
 
-    create(link: string, short_code: string, expiration: number, password?: string): Link | null {
-        let query = this.db.prepare("INSERT INTO links (short_code, link, expiration, password) VALUES ($short_code, $link, $expiration, $password);");
+    async create(link: string, short_code: string, expiration: number, password?: string, delete_token: string): Link | null {
+        let query = this.db.prepare("INSERT INTO links (short_code, link, expiration, delete_token, password) VALUES ($short_code, $link, $expiration, $delete_token, $password);");
         try {
-            query.run({ short_code, link, expiration, password });
+            query.run({ short_code, link, expiration, password, delete_token: await Bun.password.hash(delete_token) });
             return {
-                short_code, link, expiration
+                short_code, link, expiration, delete_token
             }
-        } catch (error) {                        
+        } catch (error) {
+            console.log(error)
             return null;
         }
     }

@@ -9,6 +9,7 @@ export default defineConfig({
     theme: {
         colors: {
           background: "#191E24",
+          surface: "#161c21",
           button: "#d2e0f7",
           "button-hover": "#dce6f6"
         }

@@ -1,14 +1,17 @@
 {
   "name": "example-with-unocss",
   "dependencies": {
-    "@solidjs/router": "^0.15.0",
+    "@solid-primitives/storage": "^4.2.1",
+    "@solidjs/router": "^0.15.2",
     "@solidjs/start": "^1.0.10",
-    "@unocss/preset-web-fonts": "^0.65.1",
-    "@unocss/reset": "^0.59.2",
-    "@unocss/transformer-variant-group": "^0.65.1",
+    "@unocss/preset-web-fonts": "^0.65.2",
+    "@unocss/reset": "^0.59.4",
+    "@unocss/transformer-variant-group": "^0.65.2",
     "lucide-solid": "^0.465.0",
-    "solid-js": "^1.9.2",
-    "unocss": "^0.59.2",
+    "qrcode": "^1.5.4",
+    "solid-js": "^1.9.3",
+    "solid-toast": "^0.5.0",
+    "unocss": "^0.59.4",
     "vinxi": "^0.4.3",
     "zod": "^3.24.1"
   },
@@ -16,9 +19,9 @@
     "node": ">=18"
   },
   "scripts": {
-    "dev": "vinxi dev",
-    "build": "vinxi build",
-    "start": "vinxi start",
+    "dev": "bun run --bun vinxi dev",
+    "build": "bun run --bun vinxi build",
+    "start": "bun run --bun vinxi start",
     "generate:db": "bun run scripts/generateDB.ts"
   },
   "type": "module"

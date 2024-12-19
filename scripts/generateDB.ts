@@ -1,4 +1,4 @@
-import SQLiteDataHandler from "../utils/db";
+import SQLiteDataHandler from "~/utils/db";
 
 async function main() {
     let file = Bun.file("data/db.sqlite")
