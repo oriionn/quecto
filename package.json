@@ -1,7 +1,6 @@
 {
   "name": "example-with-unocss",
   "dependencies": {
-    "@solid-primitives/storage": "^4.2.1",
     "@solidjs/router": "^0.15.2",
     "@solidjs/start": "^1.0.10",
     "@unocss/preset-web-fonts": "^0.65.2",

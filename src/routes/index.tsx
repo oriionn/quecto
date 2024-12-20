@@ -61,13 +61,32 @@ const Home: Component = () => {
       </footer>
 
       <Show when={modal.open === true}>
-        <div class="w-screen h-screen fixed top-0 left-0 bg-black bg-opacity-50 z-100 flex justify-center items-center">
-          <div class="bg-background p-5 rounded-lg">
+        <div class="w-screen h-screen fixed top-0 left-0 z-90" style={{
+          "backdrop-filter": "blur(20px)"
+        }}></div>
+        <div class="w-screen h-screen fixed top-0 left-0 z-100 flex justify-center items-center">
+          <div class="rounded-lg">
             <Show when={modal.type === ModalType.QR_CODE}>
-              <div class="flex flex-col">
-                <Suspense>
-                  <img src={qrcode()} />
-                </Suspense>
+              <div class="flex flex-col justify-center items-center">
+                <h1 class="text-lg mb-5 font-bold">Here is your QR Code for your shortened link</h1>
+                <div class="w-65 h-65 relative flex justify-center items-center">
+                  <div
+                    class="absolute w-[20px] h-[20px] top-0 right-0 border-r-(white solid [1px]) border-t-(white solid [1px])"></div>
+                  <div
+                    class="absolute w-[20px] h-[20px] bottom-0 left-0 border-l-(white solid [1px]) border-b-(white solid [1px])"></div>
+                  <div
+                    class="absolute w-[20px] h-[20px] bottom-0 right-0 border-r-(white solid [1px]) border-b-(white solid [1px])"></div>
+                  <div
+                    class="absolute w-[20px] h-[20px] top-0 left-0 border-l-(white solid [1px]) border-t-(white solid [1px])"></div>
+                  <Suspense>
+                    <img src={qrcode()} class="w-50 h-50"/>
+                  </Suspense>
+                </div>
+                <button class="bg-button hover:bg-button-hover w-5/4 py-2 rounded-lg mt-10 cursor-pointer text-black" onClick={() => setModal({
+                  open: false,
+                  type: ModalType.NONE,
+                  info: ""
+                })}>Fermer</button>
               </div>
             </Show>
           </div>
