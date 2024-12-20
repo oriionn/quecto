@@ -6,7 +6,7 @@ import {SetStoreFunction} from "solid-js/store";
 
 
 
-const History: Component<{ store: UserStorag, modal: {
+const History: Component<{ store: UserStorage, modal: {
     open: boolean,
     type: ModalType,
     info: string | { short_code: string, delete_token: string }
@@ -35,7 +35,7 @@ const History: Component<{ store: UserStorag, modal: {
                 </td>
                 <td class="text-center table-cell">
                   <a href={`https://s.oriondev.fr/${link.short_code}`} class="text-blue-500 hover:text-blue-400"
-                     target="_blank">https://s.oriondev.fr/{link.short_code}</a>
+                     target="_blank"><span class="inline-block">https://s.oriondev.fr</span>/{link.short_code}</a>
                 </td>
                 <td class="flex flex-row gap-2 justify-end pt-2">
                   <button

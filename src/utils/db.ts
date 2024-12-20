@@ -26,6 +26,16 @@ class SQLiteDataHandler {
         return results;
     }
 
+    delete(short_code: string) {
+        try {
+            let query = this.db.prepare("DELETE FROM links WHERE short_code = $short_code");
+            query.run({short_code})
+            return {short_code}
+        } catch (e) {
+            return null;
+        }
+    }
+
     getAll() {
         let query = this.db.prepare("SELECT short_code, link, expiration, created_at FROM links")
         let results: Link[] = query.all()
@@ -36,9 +46,9 @@ class SQLiteDataHandler {
     async create(link: string, short_code: string, expiration: number, password?: string, delete_token: string): Link | null {
         let query = this.db.prepare("INSERT INTO links (short_code, link, expiration, delete_token, password) VALUES ($short_code, $link, $expiration, $delete_token, $password);");
         try {
-            query.run({ short_code, link, expiration, password, delete_token: await Bun.password.hash(delete_token) });
+            query.run({ short_code, link, expiration, password, delete_token });
             return {
-                short_code, link, expiration, delete_token
+                short_code, link, expiration
             }
         } catch (error) {
             console.log(error)

@@ -4,6 +4,7 @@ import {ShortenRequest} from "~/models/requests";
 import {randomBytes} from "crypto";
 
 export async function shorten(body: ShortenRequest) {
+  "use server";
   const db = new SQLiteDataHandler();
 
   // Traiter les informations
@@ -25,10 +26,11 @@ export async function shorten(body: ShortenRequest) {
   let hasher = Bun.CryptoHasher("sha256");
   hasher.update(Buffer.from(randomBytes(256)));
   let delete_token = hasher.digest("hex");
+  let hashedDeleteToken = await Bun.password.hash(delete_token);
 
-  let dbReq = await db.create(body.link, short_code, body.expiration, hashedPassword, delete_token);
+  let dbReq = await db.create(body.link, short_code, body.expiration, hashedPassword, hashedDeleteToken);
   if (!dbReq) return makeResponse(500, { message: "An error has occurred on the server. Please try again." });
 
-  return makeResponse(200, { message: "Link has been successfully shortened.", data: dbReq })
+  return makeResponse(200, { message: "Link has been successfully shortened.", data: {...dbReq, delete_token} })
 
 }
