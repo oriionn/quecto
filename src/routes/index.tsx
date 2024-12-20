@@ -1,10 +1,10 @@
-import { Component } from "solid-js";
+import { Component, createEffect, createResource, Show, Suspense } from "solid-js";
 import Shorten from "~/components/Shorten";
 import History from "~/components/History";
 import Unshorten from "~/components/Unshorten";
 import {createStore} from "solid-js/store";
 import {UserStorage} from "~/models/userStorage";
-import {isServer} from "solid-js/web";
+import QRCode from "qrcode"
 
 export enum ModalType {
   NONE,
@@ -13,11 +13,11 @@ export enum ModalType {
 }
 
 const Home: Component = () => {
-  if (!isServer) {
-    const [store, setStore] = createStore<UserStorage>({ history: [] });
-    setStore(JSON.parse(localStorage.getItem("quecto") || JSON.stringify({ history: [] })));
-    console.log(store);
-  }
+  const [store, setStore] = createStore<UserStorage>({ history: [] });
+
+  createEffect(() => {
+    setStore(JSON.parse(localStorage.getItem("quecto") || JSON.stringify({ history: [] })));    
+  })
 
   const [modal, setModal] = createStore<{
     open: boolean,
@@ -28,6 +28,10 @@ const Home: Component = () => {
     type: ModalType.NONE,
     info: ""
   });
+
+  const [qrcode] = createResource(async () => {
+    return await QRCode.toDataURL(`https://s.oriondev.fr/${modal.info as string}`)
+  })
 
   return (
     <main class="min-h-screen min-w-screen bg-background text-white font-noto flex flex-col">
@@ -55,6 +59,20 @@ const Home: Component = () => {
                                                                 class="text-blue-500 hover:text-blue-400"
                                                                 target="_blank">Orion</a></span>
       </footer>
+
+      <Show when={modal.open === true}>
+        <div class="w-screen h-screen fixed top-0 left-0 bg-black bg-opacity-50 z-100 flex justify-center items-center">
+          <div class="bg-background p-5 rounded-lg">
+            <Show when={modal.type === ModalType.QR_CODE}>
+              <div class="flex flex-col">
+                <Suspense>
+                  <img src={qrcode()} />
+                </Suspense>
+              </div>
+            </Show>
+          </div>
+        </div>
+      </Show>
     </main>
   );
 }
