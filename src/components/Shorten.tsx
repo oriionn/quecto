@@ -92,12 +92,12 @@ const ShortenForm: Component<{ setShortened: Setter<boolean>, setResultShortcode
           <label for="password_protection" class="cursor-pointer"
                  onClick={() => setPasswordProtection(!passwordProtection())}>Protect a link with a password ?</label>
           <input type="checkbox" id="password_protection" name="password_protection"
-                 class="!outline-none !border-none mr-[5px]" checked={passwordProtection()} ref={password} />
+                 class="!outline-none !border-none mr-[5px]" checked={passwordProtection()} />
         </div>
         <Show when={passwordProtection()}>
           <div class="flex flex-row items-center mb-3">
             <input type={showPassword() ? "text" : "password"} class="input" id="password" name="password"
-                   placeholder="Password"></input>
+                   placeholder="Password" ref={password}></input>
             <Show when={showPassword()} fallback={
               <Eye onClick={() => setShowPassword(true)} color="black" class="ml-[-35px] mt-2 cursor-pointer"/>
             }>

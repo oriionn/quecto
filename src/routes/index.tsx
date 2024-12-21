@@ -6,7 +6,9 @@ import {createStore} from "solid-js/store";
 import {UserStorage} from "~/models/userStorage";
 import QRCode from "qrcode"
 import {LucideHistory, Trash} from "lucide-solid";
-import toast, {Toaster} from "solid-toast";
+import toast from "solid-toast";
+import {RouteDefinition, useSearchParams} from "@solidjs/router";
+import Toaster from "~/components/Toaster";
 
 export enum ModalType {
   NONE,
@@ -22,9 +24,14 @@ enum ErrorType {
 
 const Home: Component = () => {
   const [store, setStore] = createStore<UserStorage>({ history: [] });
+  const [searchParams, setSearchParams] = useSearchParams();
 
   createEffect(() => {
-    setStore(JSON.parse(localStorage.getItem("quecto") || JSON.stringify({ history: [] })));    
+    setStore(JSON.parse(localStorage.getItem("quecto") || JSON.stringify({ history: [] })));
+
+    if (searchParams.not_found) setTimeout(() => {
+      toast.error("Link not found");
+    }, 1000)
   })
 
   const [modal, setModal] = createStore<{
@@ -122,7 +129,7 @@ const Home: Component = () => {
                   <button
                     class="bg-transparent border-(white solid 2) w-50 h-50 rounded-lg outline-none flex flex-col gap-5 justify-center items-center"
                     onClick={async () => {
-                      let data = await deletee((modal.info as { short_code: string, delete_token: string }).short_code, (modal.info as { short_code: string, delete_token: string }).delete_token);
+                      let data = await deleteInServer((modal.info as { short_code: string, delete_token: string }).short_code, (modal.info as { short_code: string, delete_token: string }).delete_token);
                       if (!data) return toast.error("An error has occurred. Please try again.");
 
                       if (data.status !== 200) {
@@ -175,28 +182,20 @@ const Home: Component = () => {
         </div>
       </Show>
 
-      <Toaster
-        position="bottom-center"
-        toastOptions={{
-          style: {
-            background: '#1f2937',
-            color: '#f3f4f6'
-          },
-          iconTheme: {
-            primary: '#38bdf8',
-            secondary: '#1f2937'
-          },
-          duration: 2500
-        }}
-      />
+      <Toaster />
     </main>
   );
 }
 
-async function deletee(short_code: string, delete_token: string) {
+async function deleteInServer(short_code: string, delete_token: string) {
   "use server";
   const {deleteLink} = await import("~/core/delete");
   return (await deleteLink({ short_code, token: delete_token })).json();
 }
+
+export const route = {
+  path: "/",
+  component: Home,
+} satisfies RouteDefinition
 
 export default Home;

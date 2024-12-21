@@ -15,3 +15,10 @@ export const DeleteRequest = z.object({
 });
 
 export type DeleteRequest = z.infer<typeof DeleteRequest>
+
+export const UnshortenRequest = z.object({
+	short_code: z.string(),
+	password: z.string().nullable().optional()
+});
+
+export type UnshortenRequest = z.infer<typeof UnshortenRequest>
