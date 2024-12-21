@@ -122,6 +122,7 @@ const ShortenForm: Component<{ setShortened: Setter<boolean>, setResultShortcode
         <button
           class="bg-button hover:bg-button-hover px-4 py-2 border-none outline-none rounded-lg text-black"
           onClick={async () => {
+            console.log(link?.value, expiration?.value, password?.value, customShortCode?.value)
             if (link && !link.value) return toast.error("Please provide a link to shorten");
             if (expiration && !expiration.value) return toast.error("Please provide an expiration time");
 

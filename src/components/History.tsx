@@ -1,7 +1,7 @@
 import {Component, createResource, For, Show, Suspense} from "solid-js";
 import {QrCode, Trash} from "lucide-solid";
 import {UserStorage} from "~/models/userStorage";
-import {ModalType} from "~/routes";
+import {ModalType} from "~/models/modal";
 import {SetStoreFunction} from "solid-js/store";
 
 
