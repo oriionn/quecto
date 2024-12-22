@@ -4,5 +4,5 @@ interface Data {
 }
 
 export function makeResponse(status: number, data: object) {
-    return new Response(JSON.stringify({ status: status, ...data }), { status: status });
+    return new Response(JSON.stringify({ status: status, ...data }), { status });
 }

@@ -4,13 +4,16 @@ import {UserStorage} from "~/models/userStorage";
 import {ModalType, Modal as ModalInterface} from "~/models/modal";
 import {SetStoreFunction} from "solid-js/store";
 import {checkHistoryIntegrity} from "~/core/checkHistoryIntegrity";
+import {Link} from "~/models/link";
+import toast from "solid-toast";
 
 const History: Component<{ store: UserStorage, setStore: SetStoreFunction<UserStorage>, modal: ModalInterface, setModal: SetStoreFunction<ModalInterface> }> = (props) => {
   createEffect(async () => {
     if (props.store.history.length > 0) {
-      let historyIntegrity = await checkHistoryIntegrity(props.store.history);
-      if (historyIntegrity.length === 0)
-        localStorage.setItem("quecto", JSON.stringify({ history: [] }))
+      let data = await fetchHistoryIntegrity(props.store.history);
+      if (data.status !== 200) return toast.error(data.message);
+      let historyIntegrity = data.data;
+      if (historyIntegrity.length === 0) localStorage.setItem("quecto", JSON.stringify({ history: [] }))
 
       if (historyIntegrity.length !== props.store.history.length) {
         let history = props.store.history.filter((link) => historyIntegrity.includes(link.short_code));
@@ -74,6 +77,11 @@ const History: Component<{ store: UserStorage, setStore: SetStoreFunction<UserSt
   )
 }
 
-
+async function fetchHistoryIntegrity(history: Link[]) {
+  "use server";
+  let res = await checkHistoryIntegrity(history);
+  if (res.status === 200) return await res.json();
+  return { status: 500, message: "An error occurred while checking the history integrity" };
+}
 
 export default History;

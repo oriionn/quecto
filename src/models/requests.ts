@@ -22,3 +22,9 @@ export const UnshortenRequest = z.object({
 });
 
 export type UnshortenRequest = z.infer<typeof UnshortenRequest>
+
+export const HasPasswordRequest = z.object({
+	short_code: z.string()
+});
+
+export type HasPasswordRequest = z.infer<typeof HasPasswordRequest>

@@ -3,7 +3,7 @@ import {redirect, useParams} from "@solidjs/router";
 import Toaster from "~/components/Toaster";
 import toast from "solid-toast";
 
-enum ErrorType {
+export enum UnshortenErrorType {
   SHORTCODE_NOT_FOUND = "Short code not found",
   INVALID_PASSWORD = "Invalid password"
 }
@@ -22,9 +22,9 @@ const Password: Component = () => {
           if (!data) return toast.error("An error has occurred. Please try again.");
 
           if (data.status !== 200) switch (data.message) {
-              case ErrorType.SHORTCODE_NOT_FOUND:
+              case UnshortenErrorType.SHORTCODE_NOT_FOUND:
                 return window.location.href = "/?not_found=true";
-              case ErrorType.INVALID_PASSWORD:
+              case UnshortenErrorType.INVALID_PASSWORD:
                 return toast.error("Your password is invalid");
               default:
                 return toast.error("An error has occurred. Please try again.");
@@ -39,9 +39,9 @@ const Password: Component = () => {
   );
 }
 
-async function submitPassword(short_code: string, password: string) {
+export async function submitPassword(short_code: string, password: string | undefined, usePassword: boolean = true) {
   "use server";
-  if (!password) return {
+  if (!password && usePassword) return {
     status: 400,
     message: "Password is required"
   }

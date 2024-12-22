@@ -1,11 +1,8 @@
 import {APIEvent} from "@solidjs/start/dist/server";
-import {makeResponse} from "~/utils/response";
 import SQLiteDataHandler from "~/utils/db";
 import {redirect} from "@solidjs/router";
-import NotFound from "~/routes/[...404]";
-import Home from "~/routes/index";
 
-const DATE_GAP = (1000 * 60 * 60) + 500;
+export const DATE_GAP = (1000 * 60 * 60) + 500;
 
 export async function GET(event: APIEvent) {
     if (!event.params.short_id) return;
