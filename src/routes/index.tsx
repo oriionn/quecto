@@ -29,12 +29,12 @@ const Home: Component = () => {
   });
 
   return (
-    <main class="min-h-screen min-w-screen bg-background text-white font-noto flex flex-col">
+    <main class="min-h-screen min-w-screen bg-background text-white font-noto flex flex-col overflow-x-hidden">
       <div class="p-6 sm:(p-12) flex flex-col lg:(grid grid-cols-2 grid-rows-1 gap-12) w-full h-full flex-1">
         <div class="first-col">
           <Shorten store={store} setStore={setStore} />
           <Show when={store.history.length > 0}>
-            <History store={store} setModal={setModal} modal={modal} />
+            <History store={store} setModal={setModal} modal={modal} setStore={setStore} />
           </Show>
         </div>
         <div class="second-col mt-2 lg:mt-0">

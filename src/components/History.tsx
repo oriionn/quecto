@@ -1,20 +1,25 @@
-import {Component, createResource, For, Show, Suspense} from "solid-js";
+import {Component, createEffect, createResource, For, Show, Suspense} from "solid-js";
 import {QrCode, Trash} from "lucide-solid";
 import {UserStorage} from "~/models/userStorage";
-import {ModalType} from "~/models/modal";
+import {ModalType, Modal as ModalInterface} from "~/models/modal";
 import {SetStoreFunction} from "solid-js/store";
+import {checkHistoryIntegrity} from "~/core/checkHistoryIntegrity";
 
+const History: Component<{ store: UserStorage, setStore: SetStoreFunction<UserStorage>, modal: ModalInterface, setModal: SetStoreFunction<ModalInterface> }> = (props) => {
+  createEffect(async () => {
+    if (props.store.history.length > 0) {
+      let historyIntegrity = await checkHistoryIntegrity(props.store.history);
+      if (historyIntegrity.length === 0)
+        localStorage.setItem("quecto", JSON.stringify({ history: [] }))
 
+      if (historyIntegrity.length !== props.store.history.length) {
+        let history = props.store.history.filter((link) => historyIntegrity.includes(link.short_code));
+        localStorage.setItem("quecto", JSON.stringify({...props.store, history }));
+        props.setStore({...props.store, history });
+      }
+    }
+  })
 
-const History: Component<{ store: UserStorage, modal: {
-    open: boolean,
-    type: ModalType,
-    info: string | { short_code: string, delete_token: string }
-  }, setModal: SetStoreFunction<{
-    open: boolean,
-    type: ModalType,
-    info: string | { short_code: string, delete_token: string }
-  }> }> = (props) => {
   return (
     <div class="card flex flex-col mt-2">
       <h1 class="text-2xl mb-5 font-bold">History</h1>
@@ -65,7 +70,6 @@ const History: Component<{ store: UserStorage, modal: {
           }</For>
         </tbody>
       </table>
-
     </div>
   )
 }
