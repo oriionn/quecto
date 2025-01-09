@@ -5,14 +5,28 @@ import Unshorten from "~/components/Unshorten";
 import {createStore} from "solid-js/store";
 import {UserStorage} from "~/models/userStorage";
 import toast from "solid-toast";
-import {useSearchParams} from "@solidjs/router";
+import {createAsync, query, useSearchParams} from "@solidjs/router";
 import Toaster from "~/components/Toaster";
 import {Modal as ModalInterface, ModalType} from "~/models/modal";
 import Modal from "~/components/Modal";
 
+const config = query(async () => {
+    "use server";
+    const { getConfig } = await import("~/core/getConfig");
+    return await getConfig();
+}, "config");
+
+export const route = {
+  preload: () => config(),
+}
+
 const Home: Component = () => {
   const [store, setStore] = createStore<UserStorage>({ history: [] });
   const [searchParams, setSearchParams] = useSearchParams();
+  const configData = createAsync(() => config());
+
+  console.log(configData())
+
 
   createEffect(() => {
     setStore(JSON.parse(localStorage.getItem("quecto") || JSON.stringify({ history: [] })));
