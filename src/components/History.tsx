@@ -6,8 +6,11 @@ import {SetStoreFunction} from "solid-js/store";
 import {checkHistoryIntegrity} from "~/core/checkHistoryIntegrity";
 import {Link} from "~/models/link";
 import toast from "solid-toast";
+import {Config} from "~/models/config";
 
-const History: Component<{ store: UserStorage, setStore: SetStoreFunction<UserStorage>, modal: ModalInterface, setModal: SetStoreFunction<ModalInterface> }> = (props) => {
+const History: Component<{ store: UserStorage, setStore: SetStoreFunction<UserStorage>, modal: ModalInterface, setModal: SetStoreFunction<ModalInterface>, config: Config | undefined }> = (props) => {
+  if (!props.config) return <div class="card flex justify-center items-center">Loading...</div>;
+
   createEffect(async () => {
     if (props.store.history.length > 0) {
       let data = await fetchHistoryIntegrity(props.store.history);
@@ -42,8 +45,8 @@ const History: Component<{ store: UserStorage, setStore: SetStoreFunction<UserSt
                      target="_blank">{link.link}</a>
                 </td>
                 <td class="text-center table-cell">
-                  <a href={`https://s.oriondev.fr/${link.short_code}`} class="text-blue-500 hover:text-blue-400"
-                     target="_blank"><span class="inline-block">https://s.oriondev.fr</span>/{link.short_code}</a>
+                  <a href={`${props.config?.ssl ? "https":"http"}://${props.config?.domain}/${link.short_code}`} class="text-blue-500 hover:text-blue-400"
+                     target="_blank"><span class="inline-block">${props.config?.ssl ? "https":"http"}://{props.config?.domain}</span>/{link.short_code}</a>
                 </td>
                 <td class="flex flex-row gap-2 justify-end pt-2">
                   <button

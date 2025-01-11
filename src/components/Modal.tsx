@@ -5,6 +5,7 @@ import toast from "solid-toast";
 import {LucideHistory} from "lucide-solid";
 import QRCode from "qrcode";
 import {UserStorage} from "~/models/userStorage";
+import {Config} from "~/models/config";
 
 enum ErrorType {
   LINK_NOT_FOUND = "Link not found",
@@ -12,9 +13,9 @@ enum ErrorType {
   SERVER_ERROR = "An error has occurred on the server. Please try again."
 }
 
-const Modal: Component<{ modal: ModalInterface, setModal: SetStoreFunction<ModalInterface>, store: UserStorage, setStore: SetStoreFunction<UserStorage> }> = (props) => {
+const Modal: Component<{ modal: ModalInterface, setModal: SetStoreFunction<ModalInterface>, store: UserStorage, setStore: SetStoreFunction<UserStorage>, config: Config | undefined }> = (props) => {
   const [qrcode] = createResource(async () => {
-    return QRCode.toDataURL(`https://s.oriondev.fr/${props.modal.info as string}`);
+    return QRCode.toDataURL(`${props.config?.ssl ? "https":"http"}://${props.config?.domain}/${props.modal.info as string}`);
   })
 
   return (

@@ -2,8 +2,11 @@ import {Component, createSignal, Show} from "solid-js";
 import toast from "solid-toast";
 import {submitPassword, UnshortenErrorType} from "~/routes/password/[short_id]";
 import {Copy, CopyCheck, Eye, EyeOff} from "lucide-solid";
+import {Config} from "~/models/config";
 
-const Unshorten: Component = () => {
+const Unshorten: Component<{ config: Config | undefined }> = (props) => {
+  if (!props.config) return <div class="card flex justify-center items-center">Loading...</div>;
+
   const [page, setPage] = createSignal(1);
   const [shortenedLink, setShortenedLink] = createSignal("");
   const [originalLink, setOriginalLink] = createSignal("");
@@ -25,8 +28,8 @@ const Unshorten: Component = () => {
 
               // Verify if the link is a valid shortened link
               let linkValue = link.value;
-              if (!linkValue.startsWith("https://s.oriondev.fr/")) return toast.error("Invalid shortened link");
-              let short_code = linkValue.split("https://s.oriondev.fr/")[1];
+              if (!linkValue.startsWith(`${props.config?.ssl ? "https":"http"}://${props.config?.domain}/`)) return toast.error("Invalid shortened link");
+              let short_code = linkValue.split(`${props.config?.ssl ? "https":"http"}://${props.config?.domain}/`)[1];
 
 
               // Check if the link is password protected
@@ -73,7 +76,7 @@ const Unshorten: Component = () => {
               let passwordValue = password.value;
 
               // Check if the password is correct
-              let short_code = shortenedLink().split("https://s.oriondev.fr/")[1];
+              let short_code = shortenedLink().split(`${props.config?.ssl ? "https":"http"}://${props.config?.domain}/`)[1];
               let data = await submitPassword(short_code, passwordValue);
               if (!data) return toast.error("An error has occurred. Please try again.");
 

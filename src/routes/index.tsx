@@ -9,6 +9,7 @@ import {createAsync, query, useSearchParams} from "@solidjs/router";
 import Toaster from "~/components/Toaster";
 import {Modal as ModalInterface, ModalType} from "~/models/modal";
 import Modal from "~/components/Modal";
+import {Config} from "~/models/config";
 
 const config = query(async () => {
     "use server";
@@ -22,18 +23,10 @@ export const route = {
 
 const Home: Component = () => {
   const [store, setStore] = createStore<UserStorage>({ history: [] });
-  const [searchParams, setSearchParams] = useSearchParams();
-  const configData = createAsync(() => config());
-
-  console.log(configData())
-
+  const configData = createAsync<Config>((): Promise<Config> => config());
 
   createEffect(() => {
-    setStore(JSON.parse(localStorage.getItem("quecto") || JSON.stringify({ history: [] })));
-
-    if (searchParams.not_found) setTimeout(() => {
-      toast.error("Link not found");
-    }, 1000)
+      setStore(JSON.parse(localStorage.getItem("quecto") || JSON.stringify({ history: [] })));
   })
 
   const [modal, setModal] = createStore<ModalInterface>({
@@ -46,13 +39,13 @@ const Home: Component = () => {
     <main class="min-h-screen min-w-screen bg-background text-white font-noto flex flex-col overflow-x-hidden">
       <div class="p-6 sm:(p-12) flex flex-col lg:(grid grid-cols-2 grid-rows-1 gap-12) w-full h-full flex-1">
         <div class="first-col">
-          <Shorten store={store} setStore={setStore} />
+          <Shorten store={store} setStore={setStore} config={configData()} />
           <Show when={store.history.length > 0}>
-            <History store={store} setModal={setModal} modal={modal} setStore={setStore} />
+            <History store={store} setModal={setModal} modal={modal} setStore={setStore} config={configData()} />
           </Show>
         </div>
         <div class="second-col mt-2 lg:mt-0">
-          <Unshorten />
+          <Unshorten config={configData()} />
         </div>
       </div>
       <footer class="p-5 flex flex-row flex-wrap gap-x-2">
