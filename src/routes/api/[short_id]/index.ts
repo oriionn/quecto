@@ -1,5 +1,4 @@
 import {APIEvent} from "@solidjs/start/dist/server";
-import SQLiteDataHandler from "~/utils/db";
 import {makeResponse} from "~/utils/response";
 import {DeleteRequest, ShortenRequest} from "~/models/requests";
 import {deleteLink} from "~/core/delete";

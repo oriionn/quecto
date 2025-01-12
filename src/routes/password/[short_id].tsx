@@ -1,18 +1,28 @@
 import {Component} from "solid-js";
-import {redirect, useParams} from "@solidjs/router";
+import {createAsync, redirect, useParams} from "@solidjs/router";
 import Toaster from "~/components/Toaster";
 import toast from "solid-toast";
+import {config} from "~/routes";
+import {MetaProvider, Title} from "@solidjs/meta";
+import {Config} from "~/models/config";
+import Meta from "~/components/Meta";
 
 export enum UnshortenErrorType {
   SHORTCODE_NOT_FOUND = "Short code not found",
   INVALID_PASSWORD = "Invalid password"
 }
 
+export const route = {
+  preload: () => config(),
+}
+
 const Password: Component = () => {
   const short_id = useParams().short_id;
+  const configData = createAsync<Config>((): Promise<Config> => config());
 
   return (
     <main class="min-h-screen min-w-screen bg-background text-white font-noto flex justify-center items-center">
+      <Meta config={configData()} title="Password protected link" />
       <div class="card">
         <h1 class="text-2xl font-bold">Password protected link</h1>
         <input type="password" name="password" id="password" class="input w-full mt-2" placeholder="Password" required />
