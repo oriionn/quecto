@@ -46,7 +46,7 @@ const History: Component<{ store: UserStorage, setStore: SetStoreFunction<UserSt
                 </td>
                 <td class="text-center table-cell">
                   <a href={`${props.config?.ssl ? "https":"http"}://${props.config?.domain}/${link.short_code}`} class="text-blue-500 hover:text-blue-400"
-                     target="_blank"><span class="inline-block">${props.config?.ssl ? "https":"http"}://{props.config?.domain}</span>/{link.short_code}</a>
+                     target="_blank"><span class="inline-block">{props.config?.ssl ? "https":"http"}://{props.config?.domain}</span>/{link.short_code}</a>
                 </td>
                 <td class="flex flex-row gap-2 justify-end pt-2">
                   <button

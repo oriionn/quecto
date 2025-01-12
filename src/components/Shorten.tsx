@@ -176,7 +176,7 @@ async function shortenClick(link?: string, expiration?: number, password?: strin
   "use server";
   const {shorten} = await import("~/core/shorten");
 
-  if (!link || !expiration) return {
+  if (!link || (expiration !== 0 && !expiration)) return {
     status: 400,
     message: "Invalid Data"
   }

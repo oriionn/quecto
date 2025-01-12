@@ -20,12 +20,19 @@ bun install
 bun generate:db
 ```
 
-4. Build the project
+4. Generate the config
+```
+bun generate:config
+```
+
+5. Configure the database in `data/config.yml`
+
+6. Build the project
 ```
 bun run build
 ```
 
-5. Start the server
+7. Start the server
 ```
 bun start
 ```
