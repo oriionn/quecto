@@ -3,8 +3,6 @@ import {Config} from "~/models/config";
 import {Meta, MetaProvider, Title} from "@solidjs/meta";
 
 const MetaC: Component<{ config: Config | undefined, title: string }> = (props) => {
-    console.log(props.config?.instance);
-
     return (
         <MetaProvider>
             <Show when={props.config}>
