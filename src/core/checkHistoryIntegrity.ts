@@ -1,6 +1,6 @@
 import SQLiteDataHandler from "~/utils/db";
 import {Link} from "~/models/link";
-import {DATE_GAP} from "~/routes/[short_id]";
+import {DATE_GAP} from "~/utils/constants";
 import {makeResponse} from "~/utils/response";
 
 export async function checkHistoryIntegrity(body: Link[]) {
