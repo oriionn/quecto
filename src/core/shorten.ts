@@ -2,10 +2,12 @@ import {makeResponse} from "~/utils/response";
 import SQLiteDataHandler from "~/utils/db";
 import {ShortenRequest} from "~/models/requests";
 import {randomBytes} from "crypto";
+import {getConfig} from "~/core/getConfig";
 
 export async function shorten(body: ShortenRequest) {
   "use server";
   const db = new SQLiteDataHandler();
+  const config = await getConfig();
 
   // Traiter les informations
   let hashedPassword = null;
@@ -13,7 +15,7 @@ export async function shorten(body: ShortenRequest) {
   let linkRegex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/;
   if (!linkRegex.test(body.link)) return makeResponse(400, { message: "Invalid Link" });
   let short_code: string = "";
-  if (body.custom_sc) {
+  if (body.custom_sc && config.authorize_custom_shortcode) {
     let search = db.get(body.custom_sc);
     if (search !== null) return makeResponse(409, { message: "Short code already used" })
     short_code = body.custom_sc;
