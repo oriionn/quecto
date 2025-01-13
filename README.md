@@ -1,3 +1,5 @@
+![Banner of Quecto](/assets/banner.png)
+
 # Quecto - A simple link shortener
 Quecto is a simple link shortener. It is written in TypeScript, and use Bun for performance. Currently, it uses SQLite as its database, but in the future it could potentially support MySQL and PostgreSQL.
 
