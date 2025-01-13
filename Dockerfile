@@ -13,7 +13,7 @@ RUN cd /temp/dev && npm install
 # install with --production (exclude devDependencies)
 RUN mkdir -p /temp/prod
 COPY package.json bun.lockb /temp/prod/
-RUN cd /temp/prod && npm install --production
+RUN cd /temp/prod && npm install --production && bun install --production
 
 # copy node_modules from temp directory
 # then copy all (non-ignored) project files into the image
