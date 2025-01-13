@@ -8,6 +8,8 @@ COPY . .
 
 # Install any needed packages
 RUN bun install
+RUN bun generate:db
+RUN bun generate:config
 
 # Expose the port on which the API will listen
 EXPOSE 3000
