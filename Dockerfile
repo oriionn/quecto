@@ -15,4 +15,4 @@ RUN bun generate:config
 EXPOSE 3000
 
 # Run the server when the container launches
-CMD ["bun", "server.js"]
+CMD ["bun", "start"]
