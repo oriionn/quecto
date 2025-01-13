@@ -50,7 +50,7 @@ const History: Component<{ store: UserStorage, setStore: SetStoreFunction<UserSt
                 </td>
                 <td class="flex flex-row gap-2 justify-end pt-2">
                   <button
-                    class="bg-button hover:bg-button-hover p-[0.5rem] border-none outline-none rounded-lg text-black"
+                    class="bg-button hover:bg-button-hover p-[0.5rem] border-none outline-none rounded-lg text-button-text"
                     title="Generate a QR Code for the shortened link" onClick={() => {
                       props.setModal({
                         open: true,
@@ -59,7 +59,7 @@ const History: Component<{ store: UserStorage, setStore: SetStoreFunction<UserSt
                       })
                   }}><QrCode size={16}/></button>
                   <button
-                    class="bg-button hover:bg-button-hover p-[0.5rem] border-none outline-none rounded-lg text-black"
+                    class="bg-button hover:bg-button-hover p-[0.5rem] border-none outline-none rounded-lg text-button-text"
                     title="Delete link from the history" onClick={() => {
                       props.setModal({
                         open: true,

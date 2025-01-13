@@ -41,7 +41,7 @@ const Modal: Component<{ modal: ModalInterface, setModal: SetStoreFunction<Modal
                   <img src={qrcode()} class="w-60 h-60" alt={`QRCode for ${props.modal.info as string}`} />
                 </Suspense>
               </div>
-              <button class="bg-button hover:bg-button-hover w-11/10 py-2 rounded-lg mt-10 cursor-pointer text-black" onClick={() => props.setModal({
+              <button class="bg-button hover:bg-button-hover w-11/10 py-2 rounded-lg mt-10 cursor-pointer text-button-text" onClick={() => props.setModal({
                 open: false,
                 type: ModalType.NONE,
                 info: ""
@@ -110,7 +110,7 @@ const Modal: Component<{ modal: ModalInterface, setModal: SetStoreFunction<Modal
                 </button>
               </div>
               <button
-                class="bg-button hover:bg-button-hover w-11/10 py-2 rounded-lg mt-10 cursor-pointer text-black"
+                class="bg-button hover:bg-button-hover w-11/10 py-2 rounded-lg mt-10 cursor-pointer text-button-text"
                 onClick={() => props.setModal({
                   open: false,
                   type: ModalType.NONE,

@@ -26,7 +26,7 @@ const Password: Component = () => {
       <div class="card">
         <h1 class="text-2xl font-bold">Password protected link</h1>
         <input type="password" name="password" id="password" class="input w-full mt-2" placeholder="Password" required />
-        <button class="bg-button hover:bg-button-hover px-4 py-2 border-none outline-none rounded-lg text-black mt-4" onClick={async () => {
+        <button class="bg-button hover:bg-button-hover px-4 py-2 border-none outline-none rounded-lg text-button-text mt-4" onClick={async () => {
           const password = (document.getElementById("password") as HTMLInputElement).value;
           let data = await submitPassword(short_id, password);
           if (!data) return toast.error("An error has occurred. Please try again.");

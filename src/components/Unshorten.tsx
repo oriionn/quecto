@@ -23,7 +23,7 @@ const Unshorten: Component<{ config: Config | undefined }> = (props) => {
                ref={link}/>
         <div class="final w-full flex flex-row justify-end mt-3">
           <button
-            class="bg-button hover:bg-button-hover px-4 py-2 border-none outline-none rounded-lg text-black" onClick={async () => {
+            class="bg-button hover:bg-button-hover px-4 py-2 border-none outline-none rounded-lg text-button-text" onClick={async () => {
               if (!link?.value) return toast.error("Please provide a link");
 
               // Verify if the link is a valid shortened link
@@ -70,7 +70,7 @@ const Unshorten: Component<{ config: Config | undefined }> = (props) => {
         </div>
         <div class="final w-full flex flex-row justify-end mt-3">
           <button
-            class="bg-button hover:bg-button-hover px-4 py-2 border-none outline-none rounded-lg text-black"
+            class="bg-button hover:bg-button-hover px-4 py-2 border-none outline-none rounded-lg text-button-text"
             onClick={async () => {
               if (!password?.value) return toast.error("Please provide a password");
               let passwordValue = password.value;
@@ -113,7 +113,7 @@ const Unshorten: Component<{ config: Config | undefined }> = (props) => {
         </div>
         <div className="final w-full flex flex-row justify-end mt-3">
           <button
-            class="bg-button hover:bg-button-hover px-4 py-2 border-none outline-none rounded-lg text-black"
+            class="bg-button hover:bg-button-hover px-4 py-2 border-none outline-none rounded-lg text-button-text"
             onClick={() => {
               setPage(1)
             }}>Ok

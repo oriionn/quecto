@@ -10,8 +10,9 @@ export default defineConfig({
         colors: {
           background: "#191E24",
           surface: "#161c21",
-          button: "#d2e0f7",
-          "button-hover": "#dce6f6"
+          button: "#F8FFC2",
+          "button-hover": "#D8DEA1",
+          "button-text": "#58591F"
         }
     },
     shortcuts: {

@@ -42,7 +42,7 @@ const Shorten: Component<{ store: UserStorage, setStore: SetStoreFunction<UserSt
           </div>
           <div class="w-full flex flex-row justify-end mt-3">
             <button
-              class="bg-button hover:bg-button-hover px-4 py-2 border-none outline-none rounded-lg text-black"
+              class="bg-button hover:bg-button-hover px-4 py-2 border-none outline-none rounded-lg text-button-text"
               onClick={() => { setShortened(false); setResultShortcode(undefined); setCopied(false); }}
             >Ok
             </button>
@@ -163,7 +163,7 @@ const ShortenForm: Component<{ setShortened: Setter<boolean>, setResultShortcode
       </Expandable>
       <div class="final w-full flex flex-row justify-end mt-3">
         <button
-            class="bg-button hover:bg-button-hover px-4 py-2 border-none outline-none rounded-lg text-black"
+            class="bg-button hover:bg-button-hover px-4 py-2 border-none outline-none rounded-lg text-button-text"
             onClick={handleShorten}
         >Shorten
         </button>
