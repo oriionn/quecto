@@ -6,6 +6,7 @@ const MetaC: Component<{ config: Config | undefined, title: string }> = (props) 
     return (
         <MetaProvider>
             <Title>{props.config?.instance} - {props.title}</Title>
+
             <Meta property="og:title" content={`${props.config?.instance} - ${props.title}`} />
             <Meta property="og:type" content="website" />
             <Meta property="og:url" content={window.location.href} />
@@ -19,5 +20,6 @@ const MetaC: Component<{ config: Config | undefined, title: string }> = (props) 
         </MetaProvider>
     )
 }
+
 
 export default MetaC as Meta;
