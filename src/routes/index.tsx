@@ -53,7 +53,7 @@ const Home: Component = () => {
                 <a href="https://github.com/oriionn/quecto" class="text-blue-500 hover:text-blue-400" target="_blank">Source
                     code</a>
                 <span>•</span>
-                <a href="https://github.com/oriionn/quecto" class="text-blue-500 hover:text-blue-400"
+                <a href="https://quecto.oriondev.fr/docs" class="text-blue-500 hover:text-blue-400"
                    target="_blank">Documentation</a>
                 <span>•</span>
                 <span>Under license <a href="https://choosealicense.com/licenses/gpl-3.0/"
