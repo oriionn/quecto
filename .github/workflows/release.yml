@@ -1,0 +1,23 @@
+name: Release for Docker
+on:
+  release:
+    types: [published]
+
+jobs:
+  build_and_publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Log in to GitHub Container Registry
+        run: |
+          echo "${{ secrets.GH_TOKEN }}" | docker login ghcr.io -u oriionn --password-stdin
+
+      - name: Build and push the Docker image
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          docker build . --tag ghcr.io/oriionn/quecto:latest \
+                        --tag ghcr.io/oriionn/quecto:${RELEASE_TAG}
+          docker push ghcr.io/oriionn/quecto:latest
+          docker push ghcr.io/oriionn/quecto:${RELEASE_TAG}
